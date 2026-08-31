@@ -1,0 +1,18 @@
+{
+  "name": "spec-architect",
+  "version": "0.1.0",
+  "description": "Evidence-based architecture and design specification for a single implementation. Five-phase process (Research, Blueprint, Requirements, Design, Validation) produces research.md, blueprint.md, requirements.md, and design.md with a component-level requirements traceability matrix, then validates every acceptance criterion is implemented by a named component and every research claim is cited. Scoped to the 'what' and 'how' of the system's shape only — no execution plan, milestones, or task sequencing.",
+  "author": {
+    "name": "Jonathan Leff",
+    "email": "49290028+jonathanleff@users.noreply.github.com"
+  },
+  "repository": "https://github.com/jonathanleff/xcoda-ai-marketplace",
+  "keywords": [
+    "architecture",
+    "design",
+    "specification",
+    "requirements",
+    "traceability",
+    "system-design"
+  ]
+}

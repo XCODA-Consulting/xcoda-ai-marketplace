@@ -1,0 +1,18 @@
+{
+  "name": "dod-architect",
+  "version": "0.1.0",
+  "description": "Author a Definition of Done (DoD) grounded in whatever source material actually exists — documents, transcripts, tickets, existing code, or a prior PRD — rather than a fixed input taxonomy. Mines the sources for architecture-shaping constraints (not just behavior) and pairs each with a concrete design implication, labeled by provenance relationship (Source / Derived from / Must not break). Produces a Markdown DoD, optionally rendered to Google Docs.",
+  "author": {
+    "name": "Jonathan Leff",
+    "email": "49290028+jonathanleff@users.noreply.github.com"
+  },
+  "repository": "https://github.com/jonathanleff/xcoda-ai-marketplace",
+  "keywords": [
+    "dod",
+    "definition-of-done",
+    "prd",
+    "requirements",
+    "design-context",
+    "provenance"
+  ]
+}

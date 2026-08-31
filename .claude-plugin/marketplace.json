@@ -1,0 +1,33 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "xcoda-ai-marketplace",
+  "description": "Personal Claude Code plugin marketplace: source-agnostic requirements and architecture skills for scoping and designing implementations before execution planning.",
+  "owner": {
+    "name": "Jonathan Leff",
+    "email": "49290028+jonathanleff@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "dod-architect",
+      "description": "Author a Definition of Done (DoD) grounded in whatever source material actually exists — documents, transcripts, tickets, existing code, or a prior PRD — rather than a fixed input taxonomy. Mines the sources for architecture-shaping constraints (not just behavior) and pairs each with a concrete design implication, labeled by provenance relationship (Source / Derived from / Must not break). Produces a Markdown DoD, optionally rendered to Google Docs.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Jonathan Leff",
+        "email": "49290028+jonathanleff@users.noreply.github.com"
+      },
+      "source": "./plugins/dod-architect",
+      "category": "productivity"
+    },
+    {
+      "name": "spec-architect",
+      "description": "Evidence-based architecture and design specification for a single implementation. Five-phase process (Research, Blueprint, Requirements, Design, Validation) produces research.md, blueprint.md, requirements.md, and design.md with a component-level requirements traceability matrix, then validates every acceptance criterion is implemented by a named component and every research claim is cited. Scoped to the 'what' and 'how' of the system's shape only — no execution plan, milestones, or task sequencing.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Jonathan Leff",
+        "email": "49290028+jonathanleff@users.noreply.github.com"
+      },
+      "source": "./plugins/spec-architect",
+      "category": "development"
+    }
+  ]
+}
