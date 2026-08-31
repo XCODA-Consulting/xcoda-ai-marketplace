@@ -28,6 +28,17 @@
       },
       "source": "./plugins/spec-architect",
       "category": "development"
+    },
+    {
+      "name": "plan-architect",
+      "description": "Turn a settled design into a walking-skeleton execution plan. Four phases (Inventory, Spine, Milestones, Validation) produce inventory.md, spine.md and plan.md, where the first milestone walks the thinnest end-to-end path through the system and each later one thickens it along a single axis. A validator then checks that every criterion is delivered by exactly one milestone, dependencies point backwards, and M1 spans the whole spine — so a horizontally sliced plan fails instead of shipping. Scoped to delivery order only — no architecture decisions, no task breakdown.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Jonathan Leff",
+        "email": "49290028+jonathanleff@users.noreply.github.com"
+      },
+      "source": "./plugins/plan-architect",
+      "category": "development"
     }
   ]
 }
