@@ -44,7 +44,7 @@ need the whole pipeline every time; start wherever the actual uncertainty is.
 ## Installation
 
 ```bash
-claude plugin marketplace add jonathanleff/xcoda-ai-marketplace
+claude plugin marketplace add XCODA-Consulting/xcoda-ai-marketplace
 claude plugin install dod-architect@xcoda-ai-marketplace
 claude plugin install spec-architect@xcoda-ai-marketplace
 ```
