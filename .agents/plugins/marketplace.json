@@ -19,10 +19,23 @@
     },
     {
       "name": "spec-architect",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "source": {
         "source": "local",
         "path": "./plugins/spec-architect"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "plan-architect",
+      "version": "0.1.0",
+      "source": {
+        "source": "local",
+        "path": "./plugins/plan-architect"
       },
       "policy": {
         "installation": "AVAILABLE",

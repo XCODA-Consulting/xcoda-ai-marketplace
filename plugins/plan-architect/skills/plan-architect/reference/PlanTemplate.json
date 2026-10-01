@@ -1,0 +1,19 @@
+{
+  "title": "Execution plan",
+  "summary": "Replace with the outcome from the agreed architecture.",
+  "strategy": "walking-skeleton",
+  "strategy_rationale": "Replace with the first executable path across real integration boundaries.",
+  "sources": [],
+  "readiness": {
+    "kind": "reviewed",
+    "status": "pending",
+    "evidence": "Readiness review has not yet been completed.",
+    "blockers": []
+  },
+  "criteria": [],
+  "components": [],
+  "milestones": [],
+  "tasks": [],
+  "risks": [],
+  "external_prerequisites": []
+}
