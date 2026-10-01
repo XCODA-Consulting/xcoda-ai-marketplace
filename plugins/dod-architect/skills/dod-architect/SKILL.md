@@ -17,6 +17,18 @@ One artifact: **the DoD**, authored as Markdown in the dialect below. Optionally
 
 Read `reference/ExampleRun.md` for a complete worked example, and `reference/DoDTemplate.md` for a fill-in skeleton.
 
+## Resource and output paths
+
+Resolve `reference/` and `scripts/` relative to the directory containing this loaded
+`SKILL.md`, including when the host has installed it into a cache. Use the host's skill
+resource reader when resources are exposed as URIs. For shell execution, resolve the
+script to an absolute filesystem path and quote it; do not assume the current directory
+is the skill directory or rely on a host-specific plugin-root variable.
+
+Keep the Markdown deliverable in the user's chosen project/output location (default:
+the project's current directory). Resolve its path before executing a bundled tool;
+do not write deliverables into the installed plugin directory.
+
 ## Methodology — how to build a DoD that enables good design
 
 1. **Locate every source that bears on this feature.** There's no fixed list — read what the project actually has: a PRD, a requirements doc, a transcript of a scoping call, a Linear/GitHub/Jira issue thread, existing code (comments, docstrings, tests), a spreadsheet, a Slack thread export, a customer email. If the user hasn't pointed you at sources, ask what exists before inventing anything. Treat a prior PRD or DoD as a source like any other — read it in full, don't just skim its headings.
@@ -80,21 +92,24 @@ When there is no covering source:
 - **Every design-context item ends in a design implication.** Description without "so build it this way" is trivia. The implication is the payload.
 - **State the MVP/full-scope boundary everywhere it matters** — Summary, Scope, seams, Out of scope. Ambiguous scope hurts design more than missing detail.
 - **Be honest about unknowns.** Preserve candor ("no catalog exists", "assumed"). Provenance you can't stand behind erodes trust in the whole doc.
-- **Right altitude.** The DoD frames *what and why* and the constraints; it does not design the solution. Leave the architecture to the engineer — that's a separate downstream step (an architecture/spec skill; see the companion [`spec-architect`](../spec-architect) plugin). Give the engineer what they need to do it well, not a design already made for them.
+- **Right altitude.** The DoD frames *what and why* and the constraints; it does not design the solution. Leave the architecture to the engineer — that's a separate downstream step (an architecture/spec skill; see the companion `spec-architect` plugin). Give the engineer what they need to do it well, not a design already made for them.
 - **No version numbers in prose**, if the target release moves independently of the doc — a version in a heading or precondition line goes stale the moment a release slips; carry it in the tracker's label/field instead, where it's one edit, not a doc-wide search-and-replace.
 
 ## Producing the Google Doc (optional)
 
 Author the DoD as Markdown (dialect below), then render:
 
+Replace the placeholders with the resolved absolute skill directory, existing document
+id, and absolute Markdown path in the user's project.
+
 ```bash
 # validate first (no changes):
-python scripts/render_dod_to_gdoc.py --doc-id DOC_ID --md path/to/dod.md --dry-run
+python3 "<absolute-skill-dir>/scripts/render_dod_to_gdoc.py" --doc-id "<DOC_ID>" --md "<absolute-path-to-dod.md>" --dry-run
 # then apply (replaces the whole doc body, atomically):
-python scripts/render_dod_to_gdoc.py --doc-id DOC_ID --md path/to/dod.md
+python3 "<absolute-skill-dir>/scripts/render_dod_to_gdoc.py" --doc-id "<DOC_ID>" --md "<absolute-path-to-dod.md>"
 ```
 
-Requires the `gws` CLI installed and authenticated (`gws docs documents …`). The doc must already exist — create it first and grab its id from the URL (`/document/d/<DOC_ID>/edit`). If there's no Google Docs target, the Markdown file is the deliverable — don't force a render.
+Requires Python 3 with script execution and the `gws` CLI installed and authenticated (`gws docs documents …`). The doc must already exist — create it first and grab its id from the URL (`/document/d/<DOC_ID>/edit`). If there's no Google Docs target, the Markdown file is the deliverable — don't force a render. If a target exists but these tools or the bundled script are unavailable, deliver the Markdown, provide the resolved render command, and report rendering as pending. Do not claim a Google Doc was updated without running the renderer successfully.
 
 Markdown dialect (full details in the script header): `#`..`####` headings · `- ` bullets (render as "• " with hanging indent) · blank line = paragraph break · `**bold**` · a `GIVEN…/WHEN…/THEN…` block on consecutive lines renders as one grouped paragraph · a provenance line (`Source:` / `Derived from:` / `Must not break:`) gets extra space below, and consecutive provenance lines stay on separate lines. One line per flowing paragraph — GWT clauses and provenance labels are the only intentional line breaks.
 

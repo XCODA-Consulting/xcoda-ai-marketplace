@@ -1,0 +1,32 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "dod-architect",
+  "version": "0.1.1",
+  "description": "Author a Definition of Done (DoD) grounded in whatever source material actually exists — documents, transcripts, tickets, existing code, or a prior PRD — rather than a fixed input taxonomy. Mines the sources for architecture-shaping constraints (not just behavior) and pairs each with a concrete design implication, labeled by provenance relationship (Source / Derived from / Must not break). Produces a Markdown DoD, optionally rendered to Google Docs.",
+  "author": {
+    "name": "Jonathan Leff",
+    "email": "49290028+jonathanleff@users.noreply.github.com"
+  },
+  "repository": "https://github.com/XCODA-Consulting/xcoda-ai-marketplace",
+  "license": "MIT",
+  "keywords": [
+    "dod",
+    "definition-of-done",
+    "prd",
+    "requirements",
+    "design-context",
+    "provenance"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "DoD Architect",
+        "shortDescription": "Grounded requirements",
+        "longDescription": "Author or enrich a Definition of Done from documents, transcripts, tickets, existing code, or a prior PRD. Extract architecture-shaping constraints and acceptance criteria with honest source provenance so engineers can design against real needs. Produces Markdown; optional Google Docs rendering requires Python 3 and authenticated gws. Architecture design is a separate step.",
+        "developerName": "Jonathan Leff",
+        "category": "Productivity",
+        "defaultPrompt": "Create a Definition of Done from the source material I provide, with design context and source-backed acceptance criteria."
+      }
+    }
+  }
+}

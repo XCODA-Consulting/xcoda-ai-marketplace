@@ -1,6 +1,10 @@
 # XCODA AI Marketplace
 
-Claude Code plugin marketplace for scoping and designing implementations.
+Plugin marketplace for Claude, Codex, and ChatGPT, for scoping and designing implementations.
+
+Both plugins share the same skills, references, and Python tools across hosts. The repository
+provides a Claude catalog in `.claude-plugin/marketplace.json` and an OpenAI catalog in
+`.agents/plugins/marketplace.json`; both point to the same plugin folders.
 
 ## Philosophy
 
@@ -43,11 +47,70 @@ need the whole pipeline every time; start wherever the actual uncertainty is.
 
 ## Installation
 
+### Claude Code
+
 ```bash
 claude plugin marketplace add XCODA-Consulting/xcoda-ai-marketplace
 claude plugin install dod-architect@xcoda-ai-marketplace
 claude plugin install spec-architect@xcoda-ai-marketplace
 ```
+
+### Codex CLI
+
+```bash
+codex plugin marketplace add XCODA-Consulting/xcoda-ai-marketplace
+codex plugin add dod-architect@xcoda-ai-marketplace
+codex plugin add spec-architect@xcoda-ai-marketplace
+```
+
+Alternatively, enter `/plugins` in Codex to browse and install plugins from the configured
+marketplace. Start a new session after installation to load the bundled skills.
+
+For local development, register your checkout with `codex plugin marketplace add /absolute/path/to/xcoda-ai-marketplace`.
+
+### ChatGPT desktop
+
+Add the repository as a marketplace source with the Codex command above, or clone this
+repository and open it as a project in Codex in the ChatGPT desktop app. The app discovers
+the repo catalog at `.agents/plugins/marketplace.json`.
+
+1. Restart the ChatGPT desktop app.
+2. Open the Plugins Directory and choose **XCODA AI Marketplace** as the marketplace source.
+3. Install **DoD Architect**, **Spec Architect**, or both.
+4. Start a new ChatGPT or Codex chat and ask for the workflow you need.
+
+Local marketplace setup is described in the [OpenAI packaging documentation](https://developers.openai.com/plugins/build/plugins).
+
+### ChatGPT workspace GitHub import
+
+A workspace admin can import this marketplace for the team:
+
+1. Open **Admin → Plugins → Add → Import marketplace**.
+2. Set Source to `https://github.com/XCODA-Consulting/xcoda-ai-marketplace` and leave Path empty.
+3. Leave Branch, tag, or commit empty to follow the repository's default branch, or pin a revision.
+4. Import, authorize GitHub access, and review the results for both plugins.
+5. Configure each plugin's workspace installation policy and role access. Members can then
+   install available plugins and start a new chat.
+
+Workspace policies are managed in ChatGPT; repository install policies do not override them.
+See [ChatGPT plugin management](https://learn.chatgpt.com/docs/enterprise/plugin-management)
+for import and sync details. Workspace import provides access through supported ChatGPT
+surfaces; it does not publish these plugins to the public Plugins Directory.
+
+### Runtime requirements
+
+- **DoD authoring** produces Markdown and needs no local CLI. Access to source material
+  depends on the files and tools available in the chat.
+- **Architecture validation** requires Python 3 in an environment that can execute the
+  bundled script and read the generated documents. If execution is unavailable, the spec
+  remains **validation pending** until the validator runs successfully.
+- **Google Docs rendering** is optional and requires Python 3 plus an installed,
+  authenticated `gws` CLI and an existing target document. A ChatGPT plugin installation
+  does not install or authenticate `gws`.
+- **Tracker updates** require access to the relevant tracker through the host's tools or APIs.
+
+Plugins are supported in Codex CLI and the ChatGPT desktop app; the Codex IDE extension
+does not support plugins. See [supported ChatGPT and Codex surfaces](https://learn.chatgpt.com/docs/plugins).
 
 ## Quickstart
 
@@ -78,7 +141,7 @@ design is ready, not just written.
 **3. Plan the rollout** — manual for now, from `design.md` + `validation.md`, until
 `plan-architect` exists.
 
-Full worked examples live in each plugin's `reference/ExampleRun.md`.
+Full worked examples live in each plugin's `skills/<skill-name>/reference/ExampleRun.md`.
 
 ## License
 

@@ -16,11 +16,30 @@ Five phases, each gated on the one before:
 
 ## Installation
 
+Available for Claude, Codex CLI, and ChatGPT. First add the marketplace using the
+[installation instructions](../../README.md#installation), then install this plugin:
+
+**Claude Code**
+
 ```bash
 claude plugin install spec-architect@xcoda-ai-marketplace
 ```
 
+**Codex CLI**
+
+```bash
+codex plugin add spec-architect@xcoda-ai-marketplace
+```
+
+In ChatGPT desktop, choose **XCODA AI Marketplace** in the Plugins Directory and install
+**Spec Architect**. Workspace admins can also [import the GitHub marketplace](../../README.md#chatgpt-workspace-github-import).
+Start a new chat or CLI session after installation.
+
 ## What's included
+
+Paths below are relative to `skills/spec-architect/`, the directory containing `SKILL.md`.
+Installed hosts may copy that directory into a cache; resolve resources from the loaded
+skill's location rather than the current working directory.
 
 - **Skill** — `spec-architect`, routing across the five phase workflows.
 - **Workflows** — `Research.md`, `Blueprint.md`, `Requirements.md`, `Design.md`, `Validation.md`, each with its output template and gate.
@@ -28,8 +47,11 @@ claude plugin install spec-architect@xcoda-ai-marketplace
 - **Tool** — `scripts/validate_spec.py`:
 
   ```bash
-  python3 scripts/validate_spec.py --path <output-dir>
+  python3 "<absolute-skill-dir>/scripts/validate_spec.py" --path "<absolute-output-dir>"
   ```
+
+  Replace the placeholders with the installed skill directory and the project's output
+  directory. The report is written to the output directory, including when run elsewhere.
 
   | Check | Fails when |
   |---|---|
@@ -37,6 +59,14 @@ claude plugin install spec-architect@xcoda-ai-marketplace
   | references | a `Satisfies` line names a criterion that does not exist |
   | naming | the blueprint roster and the design's sections disagree |
   | evidence | a finding cites an undeclared source, or a source is never cited |
+
+## Prerequisites
+
+- Access to the requirements and sources, plus a target directory for the generated documents.
+- **Python 3** and script execution for mechanical validation. The validator uses the standard library.
+- If the host cannot execute Python or access the bundled script, author the documents and
+  provide the resolved validation command. Report **validation pending**; the design is
+  ready for planning only after the script runs successfully and generates a passing report.
 
 ## Usage
 
