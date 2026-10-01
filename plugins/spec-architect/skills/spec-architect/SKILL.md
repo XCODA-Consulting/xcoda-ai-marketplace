@@ -19,9 +19,11 @@ Five phases, each gated on the one before, producing a design whose completeness
 
 This produces the **shape of the system**, not a delivery plan. It does not sequence work into milestones, choose walking-skeleton versus horizontal slicing, or emit a task list.
 
-That separation is the point. A design and a plan answer different questions and fail in different ways, and a document trying to be both gets reviewed as neither — sequencing arguments crowd out the question of whether the design is right. When the spec passes validation, `design.md` and `validation.md` are the handoff pair for a planning step.
+That separation is the point. A design and a plan answer different questions and fail in different ways, and a document trying to be both gets reviewed as neither — sequencing arguments crowd out the question of whether the design is right. When the spec passes validation, `design.md` and `validation.md` are the handoff pair for `plan-architect`, with `requirements.md` supplying the criterion text.
 
-If asked for milestones or a rollout order, say it is out of scope here and point at the planning step rather than improvising one.
+If asked for milestones or a rollout order, say it is out of scope here and point at
+`plan-architect`. If that plugin is not available, provide the handoff artifacts rather
+than improvising a delivery plan inside this skill.
 
 ## Conventions
 
@@ -98,5 +100,5 @@ User: "Architecture spec for a rate limiter, Redis-backed, must survive a Redis 
 **Asked for a plan**
 ```
 User: "Design's validated, now plan the rollout"
--> Out of scope here. design.md + validation.md are the handoff to planning.
+-> Out of scope here. Hand design.md + validation.md, supported by requirements.md, to plan-architect.
 ```

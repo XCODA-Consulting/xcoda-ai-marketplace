@@ -75,7 +75,10 @@ skill's location rather than the current working directory.
 "I need an architecture spec for a rate limiter service, Redis-backed"
 ```
 
-When validation passes, `design.md` and `validation.md` are the handoff pair for a planning step — this skill's output is that step's input, not a substitute for it.
+When validation passes, `design.md` and `validation.md` are the handoff pair for
+the companion [plan-architect](../plan-architect), with `requirements.md` providing
+the criterion text. It creates walking-skeleton milestones and actionable tasks, then
+checks plan coverage and dependency consistency. This skill's output is that step's input.
 
 ## Relationship to `dod-architect`
 

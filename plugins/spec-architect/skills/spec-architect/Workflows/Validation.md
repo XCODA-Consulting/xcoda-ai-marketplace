@@ -39,8 +39,10 @@ do not author a substitute report or claim the design is verified or ready for p
 
 Generated, not authored. It contains a traceability table (every criterion and the components that satisfy it), coverage counts, the component-roster comparison, evidence totals, and a verdict line.
 
-**Gate**: "Validation passed — every criterion satisfied, rosters agree, evidence cited. `design.md` and `validation.md` are the handoff pair for planning."
+**Gate**: "Validation passed — every criterion satisfied, rosters agree, evidence cited. `design.md` and `validation.md` are the handoff pair for plan-architect; include `requirements.md` for criterion text."
 
 ## After a pass
 
-Stop here. Milestones, sequencing and the walking-skeleton question belong to the planning step, which reads this output rather than being folded into it.
+Stop here. Milestones, sequencing and the walking-skeleton question belong to
+`plan-architect`, which reads this output rather than being folded into it. The planning
+plugin does not rerun architecture validation; its checks cover the execution plan.

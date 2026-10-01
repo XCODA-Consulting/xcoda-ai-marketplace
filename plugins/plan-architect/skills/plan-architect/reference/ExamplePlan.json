@@ -1,0 +1,94 @@
+{
+  "title": "Redis-backed rate limiter execution plan",
+  "summary": "Deliver per-key limiting across HTTP service replicas, reject requests above the limit, and continue serving requests when Redis is unavailable. Prove the path locally before a controlled staging rollout.",
+  "strategy": "walking-skeleton",
+  "strategy_rationale": "The first milestone runs an HTTP request through RateLimiter into a real Redis counter and back to the response. Rejection, outage handling, and rollout then deepen that integrated path.",
+  "sources": [
+    {"id": "S1", "location": "ExampleRun.md#requirements", "description": "Agreed rate-limiter acceptance criteria and staging scope."},
+    {"id": "S2", "location": "ExampleRun.md#architecture", "description": "RateLimiter and RedisStore interfaces and integration constraints."},
+    {"id": "S3", "location": "ExampleRun.md#readiness-review", "description": "Fictional example's explicit architecture readiness review."}
+  ],
+  "readiness": {
+    "kind": "reviewed",
+    "status": "ready",
+    "evidence": "The example requester and design owner reviewed S1 and S2, agreed the scope, interfaces, Redis failure behavior, and feature-switch rollback, and authorized planning. S3 records this fictional review; staging access is logistics, not an unresolved design decision.",
+    "blockers": []
+  },
+  "criteria": [
+    {"id": "R1.1", "text": "When a request arrives, RateLimiter compares the shared per-key count to the configured limit.", "source_refs": [{"source": "S1", "locator": "Requirements / R1.1"}]},
+    {"id": "R1.2", "text": "When the count exceeds the limit, RateLimiter rejects the request with HTTP 429.", "source_refs": [{"source": "S1", "locator": "Requirements / R1.2"}]},
+    {"id": "R2.1", "text": "When Redis is unavailable, RedisStore reports unavailability and RateLimiter allows the request.", "source_refs": [{"source": "S1", "locator": "Requirements / R2.1"}]}
+  ],
+  "components": [
+    {"id": "RateLimiter", "description": "Enforces per-key request rates through the existing HTTP middleware.", "source_refs": [{"source": "S2", "locator": "Architecture / RateLimiter"}]},
+    {"id": "RedisStore", "description": "Atomically increments shared counters with TTL and reports store unavailability.", "source_refs": [{"source": "S2", "locator": "Architecture / RedisStore"}]}
+  ],
+  "milestones": [
+    {
+      "id": "M1", "title": "Real request-to-counter walking skeleton",
+      "outcome": "A controlled HTTP request traverses the middleware, RateLimiter, and a real RedisStore and returns an allowed response with a shared counter.",
+      "depends_on": [],
+      "demo": "Send requests for the same key through two local service replicas and inspect the shared Redis count and allowed responses below the configured limit.",
+      "acceptance": ["Both replicas increment the same counter.", "Below-limit requests return the existing successful response.", "The counter has the configured window TTL."],
+      "rollout": "Local integration environment only; the existing feature switch remains off in deployed environments.",
+      "rollback": "Disable the existing limiter feature switch; temporary counters expire by TTL."
+    },
+    {
+      "id": "M2", "title": "Rejection and outage behavior",
+      "outcome": "The integrated request path enforces the limit and fails open during Redis outages.",
+      "depends_on": ["M1"],
+      "demo": "Exceed a key's limit across both replicas to observe 429; stop Redis and repeat to observe successful responses, then restore Redis and verify enforcement resumes.",
+      "acceptance": ["Only above-limit requests receive 429.", "Redis timeout/unavailability allows requests.", "Counter expiry starts a fresh window and enforcement resumes after Redis recovery."],
+      "rollout": "Keep the feature switch off in staging until both branches pass integration verification.",
+      "rollback": "Disable the existing feature switch if the integrated branch regresses request handling."
+    },
+    {
+      "id": "M3", "title": "Controlled staging rollout",
+      "outcome": "The agreed behavior and rollback are demonstrated with two staging replicas.",
+      "depends_on": ["M2"],
+      "demo": "With staging access available, enable the feature switch for the test route, exercise allowed/429/outage cases across replicas, and demonstrate disabling the switch restores the baseline path.",
+      "acceptance": ["The staging path reproduces all agreed criteria.", "Disabling the switch restores baseline request behavior.", "No unrelated routes change behavior."],
+      "rollout": "Enable only the agreed staging test route after access and M2 gates are complete; production rollout is out of scope.",
+      "rollback": "Disable the existing switch for the test route; no persistent schema changes require reversal."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T1", "title": "Implement RedisStore on the real counter path", "milestone": "M1",
+      "work": "Implement the designed atomic increment-and-TTL operation behind RedisStore.bump(key, window_s). Connect it to the local Redis instance and the existing configuration; do not introduce an alternative store or change the interface.",
+      "depends_on": [], "criteria": [], "components": ["RedisStore"], "prerequisites": [],
+      "verification": ["Against real Redis, concurrent increments share a count and expire according to the configured window."]
+    },
+    {
+      "id": "T2", "title": "Connect middleware to the counter", "milestone": "M1",
+      "work": "Implement RateLimiter.check using the agreed key and limit configuration and call it from the existing middleware behind its feature switch. Integrate RedisStore and compare the count to the limit on the below-limit path.",
+      "depends_on": ["T1"], "criteria": ["R1.1"], "components": ["RateLimiter", "RedisStore"], "prerequisites": [],
+      "verification": ["Run requests below the limit through two local replicas and assert the allowed result and a shared count.", "Assert the comparison uses the configured limit rather than a per-replica counter."]
+    },
+    {
+      "id": "T3", "title": "Enforce rejection and window reset", "milestone": "M2",
+      "work": "Complete the RateLimiter rejection branch and HTTP 429 mapping using the existing interface. Exercise the exact threshold and the TTL reset through the integrated path.",
+      "depends_on": ["T2"], "criteria": ["R1.1", "R1.2"], "components": ["RateLimiter", "RedisStore"], "prerequisites": [],
+      "verification": ["The request at the limit is allowed; the next request receives 429 across replicas.", "After the configured window expires, the next request is allowed with a fresh shared count."]
+    },
+    {
+      "id": "T4", "title": "Complete fail-open and recovery behavior", "milestone": "M2",
+      "work": "Use the designed bounded Redis timeout and None unavailability result; make RateLimiter allow that result. Exercise Redis disconnection and recovery without changing the fail-open decision.",
+      "depends_on": ["T2"], "criteria": ["R2.1"], "components": ["RateLimiter", "RedisStore"], "prerequisites": [],
+      "verification": ["Stopped Redis and timeout scenarios return an allowed response within the designed timeout budget.", "Restoring Redis resumes shared count enforcement without restarting the service."]
+    },
+    {
+      "id": "T5", "title": "Exercise staging enablement and rollback", "milestone": "M3",
+      "work": "After staging access is supplied, enable the existing switch only for the agreed test route. Demonstrate acceptance behavior across two replicas and rehearse switch rollback; capture results for handoff.",
+      "depends_on": ["T3", "T4"], "criteria": ["R1.1", "R1.2", "R2.1"], "components": ["RateLimiter", "RedisStore"], "prerequisites": ["P1"],
+      "verification": ["Record staging allowed, rejection, expiry, and outage outcomes across replicas.", "Disable the switch and confirm baseline responses and unchanged unrelated routes."]
+    }
+  ],
+  "risks": [
+    "Integration risk: local-only mocks could conceal Redis atomicity or TTL problems; M1 uses real Redis across two replicas.",
+    "Staging access is pending; do not begin T5 until P1 becomes available. M1 and M2 can proceed independently of that access."
+  ],
+  "external_prerequisites": [
+    {"id": "P1", "description": "Access to the existing staging Redis and two service replicas for the agreed test route.", "status": "pending", "owner": null}
+  ]
+}
