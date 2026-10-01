@@ -1,4 +1,5 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "spec-architect",
   "version": "0.1.1",
   "description": "Evidence-based architecture and design specification for a single implementation. Five-phase process (Research, Blueprint, Requirements, Design, Validation) produces research.md, blueprint.md, requirements.md, and design.md with a component-level requirements traceability matrix, then validates every acceptance criterion is implemented by a named component and every research claim is cited. Scoped to the 'what' and 'how' of the system's shape only — no execution plan, milestones, or task sequencing.",
@@ -7,6 +8,7 @@
     "email": "49290028+jonathanleff@users.noreply.github.com"
   },
   "repository": "https://github.com/XCODA-Consulting/xcoda-ai-marketplace",
+  "license": "MIT",
   "keywords": [
     "architecture",
     "design",
@@ -14,5 +16,17 @@
     "requirements",
     "traceability",
     "system-design"
-  ]
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Spec Architect",
+        "shortDescription": "Verified architecture specs",
+        "longDescription": "Turn a Definition of Done, PRD, or stated requirements into an architecture specification through Research, Blueprint, Requirements, Design, and Validation. A bundled Python 3 validator checks requirements coverage, references, component names, and cited evidence. Validation remains pending if script execution is unavailable. Execution planning is a separate step.",
+        "developerName": "Jonathan Leff",
+        "category": "Developer Tools",
+        "defaultPrompt": "Design and validate an architecture specification from my requirements or Definition of Done."
+      }
+    }
+  }
 }

@@ -38,6 +38,19 @@ Component names are written identically in blueprint, requirements and design. A
 - Objectives, constraints and scope boundaries — from the user, or from a DoD/PRD
 - Optionally an existing DoD/PRD to mine in Phase 3, so requirements trace to a real ask
 - A target directory for the documents (default: current directory)
+- Python 3 and access to the bundled script in an environment with script execution, for mechanical validation
+
+## Resource and output paths
+
+Resolve `Workflows/`, `reference/`, and `scripts/` relative to the directory containing
+this loaded `SKILL.md`, including when the host has installed it into a cache. Use the
+host's skill resource reader when resources are exposed as URIs. For shell execution,
+resolve the script to an absolute filesystem path and quote it; do not assume the current
+directory is the skill directory or rely on a host-specific plugin-root variable.
+
+Keep all generated documents in the user's chosen project/output directory (default:
+the project's current directory). Resolve that directory to an absolute path before
+running validation; do not write deliverables into the installed plugin directory.
 
 ## Principles
 
@@ -49,11 +62,20 @@ Component names are written identically in blueprint, requirements and design. A
 
 ## Running validation
 
+Replace the placeholders with the resolved absolute skill directory and the user's
+absolute output directory.
+
 ```bash
-python3 scripts/validate_spec.py --path <output-dir>
+python3 "<absolute-skill-dir>/scripts/validate_spec.py" --path "<absolute-output-dir>"
 ```
 
 Checks coverage, references, component naming and evidence; writes `validation.md`; exits non-zero on any gap.
+
+If Python execution, the bundled script, or filesystem access is unavailable, report
+**validation pending** and provide the resolved command for an environment with access
+to the script and documents. Do not manufacture `validation.md`, claim a pass, or mark
+the design ready for planning until the script runs successfully and generates a passing
+report.
 
 ## Examples
 

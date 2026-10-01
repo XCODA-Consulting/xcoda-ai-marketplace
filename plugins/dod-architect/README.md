@@ -13,11 +13,30 @@ The differentiator versus a plain acceptance-criteria list is a **Design context
 
 ## Installation
 
+Available for Claude, Codex CLI, and ChatGPT. First add the marketplace using the
+[installation instructions](../../README.md#installation), then install this plugin:
+
+**Claude Code**
+
 ```bash
 claude plugin install dod-architect@xcoda-ai-marketplace
 ```
 
+**Codex CLI**
+
+```bash
+codex plugin add dod-architect@xcoda-ai-marketplace
+```
+
+In ChatGPT desktop, choose **XCODA AI Marketplace** in the Plugins Directory and install
+**DoD Architect**. Workspace admins can also [import the GitHub marketplace](../../README.md#chatgpt-workspace-github-import).
+Start a new chat or CLI session after installation.
+
 ## What's included
+
+Paths below are relative to `skills/dod-architect/`, the directory containing `SKILL.md`.
+Installed hosts may copy that directory into a cache; resolve resources from the loaded
+skill's location rather than the current working directory.
 
 ### Skill
 
@@ -35,7 +54,9 @@ claude plugin install dod-architect@xcoda-ai-marketplace
 ## Prerequisites
 
 - Nothing is required to author the DoD itself — it's a Markdown document produced from whatever sources you point at.
+- **Python 3** in an environment with script execution — only needed if rendering to Google Docs.
 - **`gws` CLI** ([googleworkspace/cli](https://github.com/googleworkspace/cli)), authenticated — only needed if rendering to Google Docs.
+- An existing Google Doc target — only needed if rendering. If Python or authenticated `gws` is unavailable, deliver the Markdown and report rendering as pending.
 - A tracker MCP or API access — only needed if aligning a project-tracker brief.
 
 ## Usage

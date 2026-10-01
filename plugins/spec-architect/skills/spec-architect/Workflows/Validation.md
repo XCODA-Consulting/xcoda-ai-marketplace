@@ -5,8 +5,12 @@
 
 ## Run it
 
+Resolve the script relative to the loaded `SKILL.md` directory (one level above
+`Workflows/`), not the current working directory. Replace the placeholders with that
+absolute skill directory and the user's absolute document-output directory.
+
 ```bash
-python3 scripts/validate_spec.py --path <output-dir>
+python3 "<absolute-skill-dir>/scripts/validate_spec.py" --path "<absolute-output-dir>"
 ```
 
 It writes `validation.md` and exits non-zero if anything fails. Four checks:
@@ -19,6 +23,10 @@ It writes `validation.md` and exits non-zero if anything fails. Four checks:
 | **evidence** | a finding cites an undeclared source, or a declared source is never cited |
 
 A non-zero exit is the phase failing. It is not an advisory — route back and fix the document, do not proceed past it.
+
+If the host cannot execute Python or access the script and documents, this phase remains
+**validation pending**. Provide the resolved command for an environment with that access;
+do not author a substitute report or claim the design is verified or ready for planning.
 
 ## Reading a failure
 
