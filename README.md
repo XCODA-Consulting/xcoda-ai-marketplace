@@ -1,10 +1,11 @@
 # XCODA AI Marketplace
 
-Plugin marketplace for Claude, Codex, and ChatGPT, for scoping, designing, and sequencing implementations.
+Plugin marketplace for Claude, Codex, ChatGPT, and Antigravity CLI, for scoping, designing, and sequencing implementations.
 
 All three plugins share the same skills, references, and Python tools across hosts. The repository
 provides a Claude catalog in `.claude-plugin/marketplace.json` and an OpenAI catalog in
-`.agents/plugins/marketplace.json`; both point to the same plugin folders.
+`.agents/plugins/marketplace.json`; both point to the same plugin folders, which also install
+directly in Antigravity CLI.
 
 ## Philosophy
 
@@ -96,6 +97,38 @@ Workspace policies are managed in ChatGPT; repository install policies do not ov
 See [ChatGPT plugin management](https://learn.chatgpt.com/docs/enterprise/plugin-management)
 for import and sync details. Workspace import provides access through supported ChatGPT
 surfaces; it does not publish these plugins to the public Plugins Directory.
+
+### Antigravity CLI
+
+Clone the repository and install each plugin directory directly with `agy`:
+
+```bash
+git clone https://github.com/XCODA-Consulting/xcoda-ai-marketplace.git
+agy plugin install ./xcoda-ai-marketplace/plugins/dod-architect
+agy plugin install ./xcoda-ai-marketplace/plugins/spec-architect
+agy plugin install ./xcoda-ai-marketplace/plugins/plan-architect
+```
+
+Verify installation with `agy plugin list` and start a new `agy` session to load the bundled skills.
+Re-run `agy plugin install` after pulling updates to refresh the staged copies under
+`~/.gemini/config/plugins/`.
+
+For local development (or to track `git pull` updates automatically without re-installing), register
+the checkout's `plugins` directory in `~/.gemini/config/plugins.json` (global) or
+`.agents/plugins.json` (workspace-scoped):
+
+```json
+{
+  "entries": [
+    {
+      "path": "/absolute/path/to/xcoda-ai-marketplace/plugins"
+    }
+  ]
+}
+```
+
+If you already installed these plugins in Claude Code, you can also import them with
+`agy plugin import claude`.
 
 ### Runtime requirements
 
